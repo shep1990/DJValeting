@@ -14,7 +14,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DJValeting.Domain\DJValeting.Domain.csproj" />
+    <ProjectReference Include="..\DJValeting.Domain\DJValeting.Domain.csproj" />
   </ItemGroup>
 
 </Project>

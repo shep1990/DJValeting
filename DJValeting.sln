@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.489
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DJValeting", "DJValeting\DJValeting.csproj", "{20412279-9D10-493F-B514-881594241CCB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DJValeting.Domain", "..\DJValeting.Domain\DJValeting.Domain.csproj", "{59A6F025-EA1B-4B7F-90FC-76C154F9D6B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DJValeting.Domain", "DJValeting.Domain\DJValeting.Domain.csproj", "{59A6F025-EA1B-4B7F-90FC-76C154F9D6B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

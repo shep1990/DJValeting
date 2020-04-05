@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using DJValeting.Domain.Data;
+using DJValeting.Domain.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +39,17 @@ namespace DJValeting
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
                     });
             });
+
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>(
+                sp =>
+                {
+                    var context = sp.GetRequiredService<DJValetingDbContext>();
+
+                    return new UnitOfWork(context);
+                });
+
+            services.AddTransient<IBookingRepository, BookingRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
