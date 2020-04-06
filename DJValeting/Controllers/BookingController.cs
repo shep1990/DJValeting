@@ -39,19 +39,14 @@ namespace DJValeting.Controllers
 
         // POST: Booking/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(BookingViewModel booking)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
 
-                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(booking);
         }
 
         // GET: Booking/Edit/5
