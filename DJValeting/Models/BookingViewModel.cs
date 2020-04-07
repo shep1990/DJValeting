@@ -9,6 +9,7 @@ namespace DJValeting.Models
 {
     public class BookingViewModel
     {
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Please enter your name")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Please select a booking date")]

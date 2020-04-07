@@ -38,8 +38,8 @@ namespace DJValeting.Domain.Data.Repositories
 
         public async Task<DJValetingBookingEntity> UpdateAsync(DJValetingBookingEntity entity)
         {
-            _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
             _unitOfWork.Context.Set<DJValetingBookingEntity>().Attach(entity);
+            _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
 
             await _unitOfWork.CommitAsync();
 

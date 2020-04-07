@@ -7,12 +7,15 @@
 
 <h1>View</h1>
 
+<a href="@Url.Action("Create", "Booking")">Add Booking</a>
+
 <h4>BookingViewModel</h4>
 <hr />
 <div class="row">
     @foreach(var item in Model)
     {
         <div class="col-md-4">
+            <a href="@Url.Action("Edit", "Booking", new { Id = item.Id })">Edit Booking</a>
             @item.Name
             @item.BookingDate
         </div>

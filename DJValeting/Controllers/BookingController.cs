@@ -29,7 +29,8 @@ namespace DJValeting.Controllers
             foreach(var booking in bookingList)
             {
                 var bookingViewModel = new BookingViewModel
-                {                 
+                {  
+                    Id = booking.Id, 
                     Name = booking.Name,
                     BookingDate = booking.BookingDate,
                     Flexibility = (FlexibilityEnum)booking.Flexibility,
@@ -82,26 +83,47 @@ namespace DJValeting.Controllers
         }
 
         // GET: Booking/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            var booking = await _bookingRepository.GetSingleAsync(p => p.Id == id);
+
+            var bookingViewModel = new BookingViewModel
+            {
+                Id = booking.Id,
+                Name = booking.Name,
+                BookingDate = booking.BookingDate,
+                Flexibility = (FlexibilityEnum)booking.Flexibility,
+                VehicleSize = (CarSizeEnum)booking.VehicleSize,
+                ContactNumber = booking.ContactNumber,
+                EmailAddress = booking.EmailAddress
+            };
+
+            return View(bookingViewModel);
         }
 
         // POST: Booking/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(BookingViewModel booking)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                var bookingEntity = new DJValetingBookingEntity()
+                {
+                    Id = booking.Id,
+                    Name = booking.Name,
+                    BookingDate = booking.BookingDate,
+                    Flexibility = (int)booking.Flexibility,
+                    VehicleSize = (int)booking.VehicleSize,
+                    ContactNumber = booking.ContactNumber,
+                    EmailAddress = booking.EmailAddress
+                };
 
-                return RedirectToAction(nameof(Index));
+                await _bookingRepository.UpdateAsync(bookingEntity);
+
+                return RedirectToAction("Index");
             }
-            catch
-            {
-                return View();
-            }
+
+            return View(booking);
         }
 
         // GET: Booking/Delete/5
