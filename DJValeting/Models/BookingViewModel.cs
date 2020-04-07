@@ -9,17 +9,18 @@ namespace DJValeting.Models
 {
     public class BookingViewModel
     {
-        [Required]
-        public String Name { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter your name")]
+        public string Name { get; set; }
+        [Required(ErrorMessage = "Please select a booking date")]
         public DateTime BookingDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select your flexibility")]
         public FlexibilityEnum Flexibility { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please select your vehicle size")]
         public CarSizeEnum VehicleSize { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter your contact number")]
         public string ContactNumber { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter your email address")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string EmailAddress { get; set; }
     }
 }

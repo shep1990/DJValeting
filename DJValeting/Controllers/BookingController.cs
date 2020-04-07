@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DJValeting.Domain.Data.Entities;
+using DJValeting.Domain.Data.Enum;
 using DJValeting.Domain.Data.Repositories;
 using DJValeting.Models;
 using Microsoft.AspNetCore.Http;
@@ -19,10 +21,27 @@ namespace DJValeting.Controllers
         }
 
         // GET: Booking
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var bookingViewModel = new BookingViewModel();
-            return View(bookingViewModel);
+            var bookingList = await _bookingRepository.GetAllAsync();
+            var bookingViewModelList = new List<BookingViewModel>();
+
+            foreach(var booking in bookingList)
+            {
+                var bookingViewModel = new BookingViewModel
+                {                 
+                    Name = booking.Name,
+                    BookingDate = booking.BookingDate,
+                    Flexibility = (FlexibilityEnum)booking.Flexibility,
+                    VehicleSize = (CarSizeEnum)booking.VehicleSize,
+                    ContactNumber = booking.ContactNumber,
+                    EmailAddress = booking.EmailAddress
+                };
+
+                bookingViewModelList.Add(bookingViewModel);
+            }
+
+            return View(bookingViewModelList);
         }
 
         // GET: Booking/Details/5
@@ -34,16 +53,29 @@ namespace DJValeting.Controllers
         // GET: Booking/Create
         public ActionResult Create()
         {
-            return View();
+            var bookingViewModel = new BookingViewModel();
+            return View(bookingViewModel);
         }
 
         // POST: Booking/Create
         [HttpPost]
-        public ActionResult Create(BookingViewModel booking)
+        public async Task<ActionResult> Create(BookingViewModel booking)
         {
             if (ModelState.IsValid)
             {
+                var bookingEntity = new DJValetingBookingEntity()
+                {
+                    Name = booking.Name,
+                    BookingDate = booking.BookingDate,
+                    Flexibility = (int)booking.Flexibility,
+                    VehicleSize = (int)booking.VehicleSize,
+                    ContactNumber = booking.ContactNumber,
+                    EmailAddress = booking.EmailAddress
+                };
 
+                await _bookingRepository.AddAsync(bookingEntity);
+
+                return RedirectToAction("Index");
             }
 
             return View(booking);
