@@ -13,11 +13,11 @@ namespace DJValeting.Models
         [Required(ErrorMessage = "Please enter your name")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Please select a booking date")]
-        public DateTime BookingDate { get; set; }
+        public DateTime? BookingDate { get; set; }
         [Required(ErrorMessage = "Please select your flexibility")]
-        public FlexibilityEnum Flexibility { get; set; }
+        public FlexibilityEnum? Flexibility { get; set; }
         [Required(ErrorMessage = "Please select your vehicle size")]
-        public CarSizeEnum VehicleSize { get; set; }
+        public CarSizeEnum? VehicleSize { get; set; }
         [Required(ErrorMessage = "Please enter your contact number")]
         public string ContactNumber { get; set; }
         [Required(ErrorMessage = "Please enter your email address")]

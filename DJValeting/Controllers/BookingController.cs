@@ -67,7 +67,7 @@ namespace DJValeting.Controllers
                 var bookingEntity = new DJValetingBookingEntity()
                 {
                     Name = booking.Name,
-                    BookingDate = booking.BookingDate,
+                    BookingDate = booking.BookingDate.Value,
                     Flexibility = (int)booking.Flexibility,
                     VehicleSize = (int)booking.VehicleSize,
                     ContactNumber = booking.ContactNumber,
@@ -111,7 +111,7 @@ namespace DJValeting.Controllers
                 {
                     Id = booking.Id,
                     Name = booking.Name,
-                    BookingDate = booking.BookingDate,
+                    BookingDate = booking.BookingDate.Value,
                     Flexibility = (int)booking.Flexibility,
                     VehicleSize = (int)booking.VehicleSize,
                     ContactNumber = booking.ContactNumber,
