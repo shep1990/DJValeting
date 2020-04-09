@@ -17,7 +17,7 @@
                 @Html.ValidationMessageFor(x => x.Name)
             </div>
             <div class="form-group">
-                @Html.TextBoxFor(model => model.BookingDate, @"{0:yyyy\/MM\/dd}", new { @class = "datepicker" })
+                @Html.TextBoxFor(x => x.BookingDate, new { @class = "form-control" })
                 @Html.ValidationMessageFor(x => x.BookingDate)
             </div>
             <div class="form-group">
@@ -51,8 +51,10 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('#BookingDate').datepicker();
-    })
-</script>
+@section Scripts {
+    <script>
+        $('document').ready(function () {
+            $('#BookingDate').datepicker({ dateFormat: 'dd/mm/yy' });
+        })
+    </script>
+}
