@@ -6,11 +6,13 @@ using DJValeting.Domain.Data.Entities;
 using DJValeting.Domain.Data.Enum;
 using DJValeting.Domain.Data.Repositories;
 using DJValeting.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DJValeting.Controllers
 {
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly IBookingRepository _bookingRepository;

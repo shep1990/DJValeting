@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using DJValeting.Domain.Data;
 using DJValeting.Domain.Data.Repositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -32,14 +33,13 @@ namespace DJValeting
             {
                 options.UseLazyLoadingProxies(false)
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                    sqlServerOptionsAction: sqlOptions =>
-                    {
-                        sqlOptions.MigrationsAssembly(typeof(DJValetingDbContext).GetTypeInfo().Assembly.GetName().Name);
-                        //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
-                    });
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(DJValetingDbContext).GetTypeInfo().Assembly.GetName().Name);
+                    //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null);
+                });
             });
-
 
             services.AddTransient<IUnitOfWork, UnitOfWork>(
                 sp =>
@@ -56,6 +56,28 @@ namespace DJValeting
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie(setup => setup.ExpireTimeSpan = TimeSpan.FromMinutes(60))
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.Authority = Configuration.GetSection("AuthenticationAuthority").Value;
+                options.SignedOutRedirectUri = Configuration.GetSection("ClientSite").Value;
+                options.RequireHttpsMetadata = true;
+                options.ClientId = "DjValeting";
+                options.ClientSecret = "secret";
+                options.ResponseType = "code id_token";
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.Scope.Clear();
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
             });
 
 
@@ -76,7 +98,11 @@ namespace DJValeting
                 app.UseHsts();
             }
 
+            app.UseHsts();
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseMvcWithDefaultRoute();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
